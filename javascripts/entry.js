@@ -16,9 +16,23 @@ const counter = (state=7, action) => {
   }
 }
 
+const todos = (state =[], action ) => {
+  switch (action.type) {
+    case 'ADD_TODO':
+      return [
+        ...state,
+        {
+          id : action.id,
+          text : action.text
+        }
+      ]
+    default:
+      return state;
+  }
+}
+
 // const { createStore } = Redux;
 const store = createStore(counter);
-
 const Counter = ({
   value,
   onInc,
@@ -26,6 +40,7 @@ const Counter = ({
 }) => (
   // <h1>{value}</h1>
   <div className="myDiv">Hello Electron app that i just changed from ReactDOM with {value}!
+  Using Electon 
   <button onClick={onInc}>Up</button>
   <button onClick={onDe}>Down</button>
   </div>
