@@ -11,7 +11,3 @@ export default({
     <button onClick={onDe}>Down</button>
     </div>
 );
-
-// export default C = ({
-
-// );

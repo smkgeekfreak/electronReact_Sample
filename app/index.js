@@ -4,8 +4,9 @@ require('../less/main.less');
 
 import React, { Component, PropTypes } from "react";
 import ReactDOM from "react-dom";
-import Text from "./components/text"
-import Counter from "./components/counter"
+import { Block, Flex } from 'jsxstyle';
+import Text from "./components/text";
+import Counter from "./components/counter";
 
 import {createStore} from "redux";
 
@@ -19,6 +20,19 @@ const counter = (state=2, action) => {
       return state;
   }
 };
+
+const Fonts = ({ children }) =>
+<Block fontFamily='Helvetica, Arial, sans-serif'>
+{children}
+</Block>;
+
+const Center = ({ children }) =>
+  <Flex alignItems='center'
+        justifyContent='center'
+        flexWrap='wrap'
+        >
+    {children}
+  </Flex>;
 
 // const responsibility = (state, action) => {
 //   switch (action.type) {
@@ -46,9 +60,11 @@ class Application extends React.Component {
   render() {
     return (
       <div>
+          <Fonts>
           <h1>This</h1>
           <Text value="try"/>
           <Text value="test"/>
+          <Center>
           <Counter value={store.getState()}
             onInc={() =>
              store.dispatch({
@@ -61,6 +77,8 @@ class Application extends React.Component {
            })
           }
           />
+          </Center>
+          </Fonts>
 
       </div>
     );
