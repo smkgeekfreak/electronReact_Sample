@@ -1,14 +1,33 @@
 import { combineReducers } from 'redux'
-
-const ADD_TODO = 'ADD_TODO'
-const COMPLETE_TODO = 'COMPLETE_TODO'
-const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
-const VisibilityFilters = {
-  SHOW_ALL: 'SHOW_ALL',
-  SHOW_COMPLETED: 'SHOW_COMPLETED',
-  SHOW_ACTIVE: 'SHOW_ACTIVE'
-}
+import {ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters} from '../actions/actions'
+// const ADD_TODO = 'ADD_TODO'
+// const COMPLETE_TODO = 'COMPLETE_TODO'
+// const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
+// const VisibilityFilters = {
+//   SHOW_ALL: 'SHOW_ALL',
+//   SHOW_COMPLETED: 'SHOW_COMPLETED',
+//   SHOW_ACTIVE: 'SHOW_ACTIVE'
+// }
 const { SHOW_ALL } = VisibilityFilters
+
+function count(state = 0, action) {
+
+  // if(typeof state === 'undefined'){
+  //     console.log('count underfined');
+  //     return {
+  //       ...state,
+  //       count: 0
+  //     }
+  // }
+  switch (action.type) {
+    case 'INCREMENT_COUNT':
+      return state + 1;
+    case 'DECREMENT_COUNT' :
+      return state - 1;
+    default:
+      return state
+  }
+}
 
 function visibilityFilter(state = SHOW_ALL, action) {
   switch (action.type) {
@@ -57,6 +76,7 @@ function todos(state = [], action) {
 }
 
 const todoApp = combineReducers({
+  count,
   visibilityFilter,
   todos
 })

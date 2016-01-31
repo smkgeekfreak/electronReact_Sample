@@ -1,7 +1,6 @@
 
 require('../less/main.less');
 'use strict';
-
 import React, { Component, PropTypes } from "react";
 import ReactDOM from "react-dom";
 import { Block, Flex } from 'jsxstyle';
@@ -10,37 +9,39 @@ import Counter from "./components/counter";
 import Griddle from 'griddle-react';
 import { Provider } from 'react-redux';
 // import DevTools from './components/DevTools';
+import {addTodo, completeTodo, setVisibilityFilter} from './actions/actions'
+import VisFilter from "./components/visFilter"
 
 import {createStore, applyMiddleware, compose} from "redux";
 
 import todoApp from './containers/todos';
 
-const counter = (state = 0, action) => {
-  switch (action.type) {
-    case 'INC':
-      return state + 1;
-    case "DEC" :
-      return state- 1;
-    default:
-      return state;
-  }
-};
-
-const filter = (state='ALL', action) => {
-  switch (action.type) {
-    case 'SET_FILTER':
-      return action.filter;
-    default:
-      return state;
-  }
-}
-
-const rootStore =(state={}, action) => {
-  return {
-    counter: counter(state, action),
-    filter: filter(state.filter,action)
-  };
-};
+// const counter = (state = 0, action) => {
+//   switch (action.type) {
+//     case 'INC':
+//       return state + 1;
+//     case "DEC" :
+//       return state- 1;
+//     default:
+//       return state;
+//   }
+// };
+//
+// const filter = (state='ALL', action) => {
+//   switch (action.type) {
+//     case 'SET_FILTER':
+//       return action.filter;
+//     default:
+//       return state;
+//   }
+// }
+//
+// const rootStore =(state={}, action) => {
+//   return {
+//     counter: counter(state, action),
+//     filter: filter(state.filter,action)
+//   };
+// };
 
 // const finalCreateStore = compose(
 //   // Middleware you want to use in development:
@@ -135,24 +136,30 @@ class Application extends React.Component {
           <h1>This</h1>
           <Text value="try"/>
           <Text value="test"/>
+          <Text value={store.getState().count}/>
           <Center>
           <div>
           <Counter value={store.getState()}
             onInc={() =>
              store.dispatch({
-             type: "ADD_TODO",
-             id:1,
-             text:'new'
+             type: "INCREMENT_COUNT",
            })
           }
           onDe={() =>
            store.dispatch({
-             type: "SET_VISIBILITY_FILTER",
-             filter:"SHOW_ACTIVE"
+             type: "DECREMENT_COUNT"
            })
           }
           />
           </div>
+          <VisFilter
+            onShowAll={() =>
+              store.dispatch(setVisibilityFilter("SHOW_ALL"))
+          }
+          onShowActive={() =>
+           store.dispatch(setVisibilityFilter("SHOW_ACTIVE"))
+          }
+          />
           <Griddle  results={teams}/>
           <Griddle  results={people}/>
           </Center>
@@ -171,7 +178,6 @@ const render = () => {
     </div>
     ,
     document.getElementById("root"));
-
     console.log(store.getState())
   };
 
