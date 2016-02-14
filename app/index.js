@@ -6,10 +6,11 @@ import ReactDOM from "react-dom";
 import { Block, Flex } from 'jsxstyle';
 import Text from "./components/text";
 import Counter from "./components/counter";
+import TodoList from "./components/todoList";
 import Griddle from 'griddle-react';
 import { Provider } from 'react-redux';
 // import DevTools from './components/DevTools';
-import {addTodo, completeTodo, setVisibilityFilter} from './actions/actions'
+import {addGroup, addTodo, completeTodo, setVisibilityFilter} from './actions/actions'
 import VisFilter from "./components/visFilter"
 
 import {createStore, applyMiddleware, compose} from "redux";
@@ -133,6 +134,18 @@ class Application extends React.Component {
     return (
       <div>
           <Fonts>
+          <div>
+          <input id="addText" ref={node=>{
+            this.input = node;
+          }}/>
+          <div>   </div>
+          <button onClick = {()=>{
+            store.dispatch(addTodo(this.input.value))
+            document.getElementById("addText").value= '';
+          }}>Add</button>
+
+          <TodoList todos={store.getState().todos} />
+          </div>
           <h1>This</h1>
           <Text value="try"/>
           <Text value="test"/>
@@ -167,7 +180,9 @@ class Application extends React.Component {
       </div>
 
     );
-    console.log(store.getState())
+    // console.log(store.getState())
+    // store.dispatch(addTodo("combinded todo"))
+    // console.log(store.getState())
   }
 }
 
@@ -183,7 +198,11 @@ const render = () => {
 
 store.subscribe(render);
 render();
-//
+store.dispatch(addTodo("combinded todo"))
+store.dispatch(addTodo("second todo"))
+store.dispatch(addGroup("My Group"))
+// store.dispatch(addGroup("combinded todo"))
+
 // import showMyDevTools from './showDevTools';
 // if (process.env.NODE_ENV !== 'production') {
 //   showMyDevTools(store);
