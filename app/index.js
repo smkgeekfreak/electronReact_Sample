@@ -3,6 +3,7 @@ require('../less/main.less');
 'use strict';
 import React, { Component, PropTypes } from "react";
 import ReactDOM from "react-dom";
+
 import { Block, Flex } from 'jsxstyle';
 import Text from "./components/text";
 import Counter from "./components/counter";
@@ -108,7 +109,7 @@ class Application extends React.Component {
             document.getElementById("addText").value= '';
           }}>Add</button>
 
-          <TodoList todos={store.getState().todos} />
+          <TodoList todos={store.getState().todos} store={store} />
           </div>
           <h1>This</h1>
           <Text value="try"/>
