@@ -3,7 +3,7 @@ require('../less/main.less');
 'use strict';
 import React, { Component, PropTypes } from "react";
 import ReactDOM from "react-dom";
-
+import SplitPane from 'react-split-pane';
 import { Block, Flex } from 'jsxstyle';
 import Text from "./components/text";
 import Counter from "./components/counter";
@@ -98,6 +98,16 @@ class Application extends React.Component {
   render() {
     return (
       <div>
+      <SplitPane split="vertical" minSize="75" defaultSize="75">
+      <div>
+      <h1>This</h1>
+      <Text value="try"/>
+      <Text value="test"/>
+      <Text value={store.getState().count}/>
+      </div>
+
+      <SplitPane split="horizontal"minSize="50" defaultSize="570">
+
           <Fonts>
           <div>
           <input id="addText" ref={node=>{
@@ -111,10 +121,6 @@ class Application extends React.Component {
 
           <TodoList todos={store.getState().todos} store={store} />
           </div>
-          <h1>This</h1>
-          <Text value="try"/>
-          <Text value="test"/>
-          <Text value={store.getState().count}/>
           <Center>
           <div>
           <Counter value={store.getState()}
@@ -142,6 +148,11 @@ class Application extends React.Component {
           <Griddle  results={people}/>
           </Center>
           </Fonts>
+          <div></div>
+<div></div>
+</SplitPane>
+</SplitPane>
+
       </div>
 
     );
