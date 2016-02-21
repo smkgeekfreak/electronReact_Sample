@@ -1,6 +1,6 @@
 import React from 'react';
 export default ( props ) => (
-  <div>
+  <div className='theirDiv'>
   <ul>
     {props.todos.map( todo =>
       <li key={todo.id}
