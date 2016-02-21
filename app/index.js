@@ -150,7 +150,13 @@ class Application extends React.Component {
             document.getElementById("addText").value= '';
           }}>Add Todo</button>
 
-          <TodoList todos={visableTodos} store={store} divStyle='thierDiv' />
+          <TodoList todos={visableTodos}
+              onTodoClick={id => store.dispatch({
+                type:"COMPLETE_TODO",
+                id
+              })
+          }
+          />
           </div>
           <div>
           <input id="addGroup" ref={node=>{
