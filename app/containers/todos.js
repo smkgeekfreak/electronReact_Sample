@@ -1,13 +1,10 @@
 import { combineReducers } from 'redux'
-import {ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters} from '../actions/actions'
-// const ADD_TODO = 'ADD_TODO'
-// const COMPLETE_TODO = 'COMPLETE_TODO'
-// const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
-// const VisibilityFilters = {
-//   SHOW_ALL: 'SHOW_ALL',
-//   SHOW_COMPLETED: 'SHOW_COMPLETED',
-//   SHOW_ACTIVE: 'SHOW_ACTIVE'
-// }
+import {
+  ADD_TODO, COMPLETE_TODO,
+  SET_VISIBILITY_FILTER, VisibilityFilters,
+  ADD_GROUP, RENAME_GROUP, REMOVE_GROUP
+} from '../actions/actions'
+import { group, groups} from './groups'
 const { SHOW_ALL } = VisibilityFilters
 
 function count(state = 0, action) {
@@ -29,20 +26,48 @@ function count(state = 0, action) {
   }
 }
 
-function visibilityFilter(state = SHOW_ALL, action) {
-  switch (action.type) {
-    case SET_VISIBILITY_FILTER:
-      return action.filter
-    default:
-      return state
-  }
-}
+// function group(state, action ) {
+//   switch (action.type) {
+//     case ADD_GROUP:
+//       return {
+//         ...state,
+//         name: action.name,
+//         status: 'ACTIVE'
+//       }
+//     case RENAME_GROUP:
+//       if(state.id !== action.id) {
+//         return state;
+//       }
+//       return {
+//         ...state,
+//         name: action.name
+//       }
+//   }
+// }
+//
+// function groups(state = [], action) {
+//   switch (action.type) {
+//     case ADD_GROUP:
+//       return [
+//         ...state,
+//         group({
+//           id:state.reduce((maxId, group) => Math.max(group.id, maxId), -1) + 1
+//         }, action)
+//       ]
+//     case RENAME_GROUP:
+//       return state.map(g =>
+//         group(g, action)
+//       )
+//     default:
+//       return state
+//   }
+// }
 
 function todo(state, action) {
   switch (action.type) {
     case ADD_TODO:
       return {
-        id: action.id,
+        ...state,
         text: action.text,
         completed: false
       }
@@ -53,18 +78,22 @@ function todo(state, action) {
 
       return {
         ...state,
-        completed: true
+        completed:!state.completed
       }
     default:
       return state
   }
 }
+
 function todos(state = [], action) {
+
   switch (action.type) {
     case ADD_TODO:
       return [
         ...state,
-        todo(undefined, action)
+        todo({
+          id:state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1
+        }, action)
       ]
     case COMPLETE_TODO:
       return state.map(t =>
@@ -75,10 +104,21 @@ function todos(state = [], action) {
   }
 }
 
+function visibilityFilter(state = SHOW_ALL, action) {
+  switch (action.type) {
+    case SET_VISIBILITY_FILTER:
+      return action.filter
+    default:
+      return state
+  }
+}
+
+
 const todoApp = combineReducers({
   count,
   visibilityFilter,
-  todos
+  todos,
+  groups
 })
 
 export default todoApp

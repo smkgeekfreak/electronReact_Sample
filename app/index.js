@@ -3,64 +3,61 @@ require('../less/main.less');
 'use strict';
 import React, { Component, PropTypes } from "react";
 import ReactDOM from "react-dom";
+import SplitPane from 'react-split-pane';
 import { Block, Flex } from 'jsxstyle';
 import Text from "./components/text";
 import Counter from "./components/counter";
+import TodoList from "./components/todoList";
+import GroupList from "./components/groupList";
 import Griddle from 'griddle-react';
 import { Provider } from 'react-redux';
 // import DevTools from './components/DevTools';
-import {addTodo, completeTodo, setVisibilityFilter} from './actions/actions'
+import {addGroup, addTodo, completeTodo, setVisibilityFilter,VisibilityFilters} from './actions/actions'
 import VisFilter from "./components/visFilter"
 
 import {createStore, applyMiddleware, compose} from "redux";
 
 import todoApp from './containers/todos';
 
-// const counter = (state = 0, action) => {
-//   switch (action.type) {
-//     case 'INC':
-//       return state + 1;
-//     case "DEC" :
-//       return state- 1;
-//     default:
-//       return state;
-//   }
-// };
-//
-// const filter = (state='ALL', action) => {
-//   switch (action.type) {
-//     case 'SET_FILTER':
-//       return action.filter;
-//     default:
-//       return state;
-//   }
-// }
-//
-// const rootStore =(state={}, action) => {
-//   return {
-//     counter: counter(state, action),
-//     filter: filter(state.filter,action)
-//   };
-// };
-
-// const finalCreateStore = compose(
-//   // Middleware you want to use in development:
-//   // Required! Enable Redux DevTools with the monitors you chose
-//   DevTools.instrument()
-//   // Optional. Lets you write ?debug_session=<key> in address bar to persist debug sessions
-//   // persistState(getDebugSessionKey())
-// )(createStore);
-
-// const store = finalCreateStore(todoApp);
 const store = createStore(todoApp);
 
 console.log("Initial State");
 console.log(store.getState())
 
+const FilterLink = ({
+  filter,
+  childern
+}) => {
+  return (
+    <a href='#'
+      onClick={e => {
+        e.preventDefault();
+        store.dispatch({
+          type:SET_VISIBILITY_FILTER,
+          filter
+        });
+      }}
+      >
+      {children}
+      </a>
+  );
+};
+function getFilterTodos(todos,filter) {
+  switch(filter) {
+    case VisibilityFilters.SHOW_ALL:
+      return todos;
+    case VisibilityFilters.SHOW_COMPLETED:
+      return todos.filter(t=>t.completed);
+    case VisibilityFilters.SHOW_ACTIVE:
+      return todos.filter(t=>!t.completed);
+    default:
+      return todos;
+    }
+  }
 const Fonts = ({ children }) =>
-<Block fontFamily='Helvetica, Arial, sans-serif'>
-{children}
-</Block>;
+  <Block fontFamily='Helvetica, Arial, sans-serif'>
+  {children}
+  </Block>;
 
 const Center = ({ children }) =>
   <Flex alignItems='center'
@@ -130,13 +127,41 @@ var teams = [
 
 class Application extends React.Component {
   render() {
+    const visableTodos = getFilterTodos(store.getState().todos,store.getState().visibilityFilter);
     return (
-      <div>
+      <div className="myDiv">
+      <SplitPane split="vertical" minSize="75" defaultSize="75">
+      <div className="urDiv">
+      <h1>This</h1>
+      <Text value="try"/>
+      <Text value="test"/>
+      <Text value={store.getState().count}/>
+      </div>
+
+      <SplitPane split="horizontal"minSize="50" defaultSize="570">
           <Fonts>
-          <h1>This</h1>
-          <Text value="try"/>
-          <Text value="test"/>
-          <Text value={store.getState().count}/>
+          <div>
+          <input id="addText" ref={node=>{
+            this.input = node;
+          }}/>
+          <div>   </div>
+          <button onClick = {()=>{
+            store.dispatch(addTodo(this.input.value))
+            document.getElementById("addText").value= '';
+          }}>Add Todo</button>
+
+          <TodoList todos={visableTodos} store={store} divStyle='thierDiv' />
+          </div>
+          <div>
+          <input id="addGroup" ref={node=>{
+            this.groupName= node;
+          }}/>
+          <button onClick = {()=>{
+            store.dispatch(addGroup(document.getElementById("addGroup").value))
+            document.getElementById("addGroup").value= '';
+          }}>Add Group</button>
+          <GroupList groups={store.getState().groups} store={store} />
+          </div>
           <Center>
           <div>
           <Counter value={store.getState()}
@@ -154,20 +179,30 @@ class Application extends React.Component {
           </div>
           <VisFilter
             onShowAll={() =>
-              store.dispatch(setVisibilityFilter("SHOW_ALL"))
+              store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_ALL))
           }
           onShowActive={() =>
-           store.dispatch(setVisibilityFilter("SHOW_ACTIVE"))
+           store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_ACTIVE))
+          }
+          onShowCompleted={() =>
+           store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED))
           }
           />
           <Griddle  results={teams}/>
           <Griddle  results={people}/>
           </Center>
           </Fonts>
+          <div></div>
+      <div></div>
+      </SplitPane>
+      </SplitPane>
+
       </div>
 
     );
-    console.log(store.getState())
+    // console.log(store.getState())
+    // store.dispatch(addTodo("combinded todo"))
+    // console.log(store.getState())
   }
 }
 
@@ -183,7 +218,12 @@ const render = () => {
 
 store.subscribe(render);
 render();
-//
+store.dispatch(addTodo("combinded todo"))
+store.dispatch(addTodo("second todo"))
+store.dispatch(addGroup("My Group"))
+store.dispatch(addGroup("2nd Group"))
+// store.dispatch(addGroup("combinded todo"))
+
 // import showMyDevTools from './showDevTools';
 // if (process.env.NODE_ENV !== 'production') {
 //   showMyDevTools(store);
