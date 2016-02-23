@@ -124,7 +124,9 @@ var teams = [
     name:"team 2",
   }
 ]
-
+const AddTodo = () => {
+  let input;
+}
 class Application extends React.Component {
   render() {
     const visableTodos = getFilterTodos(store.getState().todos,store.getState().visibilityFilter);
@@ -154,8 +156,7 @@ class Application extends React.Component {
               onTodoClick={id => store.dispatch({
                 type:"COMPLETE_TODO",
                 id
-              })
-          }
+              })}
           />
           </div>
           <div>
@@ -166,7 +167,12 @@ class Application extends React.Component {
             store.dispatch(addGroup(document.getElementById("addGroup").value))
             document.getElementById("addGroup").value= '';
           }}>Add Group</button>
-          <GroupList groups={store.getState().groups} store={store} />
+          <GroupList groups={store.getState().groups} store={store}
+            onGroupClick={id => store.dispatch({
+              type:"REMOVE_GROUP",
+              id
+            })}
+          />
           </div>
           <Center>
           <div>
