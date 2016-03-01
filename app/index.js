@@ -134,9 +134,9 @@ class Application extends React.Component {
       <div className="myDiv">
       <SplitPane split="vertical" minSize="75" defaultSize="75">
       <div className="urDiv">
-      <h1>This</h1>
-      <Text value="try"/>
-      <Text value="test"/>
+      <h1>This is longer</h1>
+      <Text value="try to improve"/>
+      <Text value="test and measure"/>
       <Text value={store.getState().count}/>
       </div>
 
@@ -167,7 +167,8 @@ class Application extends React.Component {
             store.dispatch(addGroup(document.getElementById("addGroup").value))
             document.getElementById("addGroup").value= '';
           }}>Add Group</button>
-          <GroupList groups={store.getState().groups} store={store}
+
+          <GroupList groups={store.getState().groups} 
             onGroupClick={id => store.dispatch({
               type:"REMOVE_GROUP",
               id
