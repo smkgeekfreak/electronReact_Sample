@@ -116,6 +116,7 @@ let people = [
         compentencyId: 2
       }
 ]
+
 var teams = [
   {
     id:0,
@@ -126,29 +127,7 @@ var teams = [
     name:"team 2",
   }
 ]
-// const AddTodo = ({
-//   onAddClick
-// }) => {
-//   let input;
-//   return (
-//     <div>
-//     <input ref={ node => {
-//       input = node;
-//     }} />
-//     <button onClick={()=> {
-//       onAddClick(input.value)
-//       input.value='';
-//     }}>
-//       Add Todo
-//     </button>
-//     </div>
-//   );
-// };
 
-// class Application extends React.Component {
-//   render() {
-//     // const visableTodos = getFilterTodos(store.getState().todos,store.getState().visibilityFilter);
-//     return (
 const Application = ({}) => (
       <div className="myDiv">
       <SplitPane split="vertical" minSize="75" defaultSize="75">
