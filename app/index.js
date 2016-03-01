@@ -9,6 +9,7 @@ import Text from "./components/text";
 import Counter from "./components/counter";
 import TodoList from "./components/todoList";
 import GroupList from "./components/groupList";
+import AddTodoPres from "./components/addtodo";
 import Griddle from 'griddle-react';
 import { Provider } from 'react-redux';
 // import DevTools from './components/DevTools';
@@ -124,9 +125,25 @@ var teams = [
     name:"team 2",
   }
 ]
-const AddTodo = () => {
-  let input;
-}
+// const AddTodo = ({
+//   onAddClick
+// }) => {
+//   let input;
+//   return (
+//     <div>
+//     <input ref={ node => {
+//       input = node;
+//     }} />
+//     <button onClick={()=> {
+//       onAddClick(input.value)
+//       input.value='';
+//     }}>
+//       Add Todo
+//     </button>
+//     </div>
+//   );
+// };
+
 class Application extends React.Component {
   render() {
     const visableTodos = getFilterTodos(store.getState().todos,store.getState().visibilityFilter);
@@ -138,6 +155,11 @@ class Application extends React.Component {
       <Text value="try to improve"/>
       <Text value="test and measure"/>
       <Text value={store.getState().count}/>
+      <AddTodoPres
+        onAddClick={ text=>
+          store.dispatch(addTodo(text))
+          }
+          />
       </div>
 
       <SplitPane split="horizontal"minSize="50" defaultSize="570">
@@ -168,7 +190,7 @@ class Application extends React.Component {
             document.getElementById("addGroup").value= '';
           }}>Add Group</button>
 
-          <GroupList groups={store.getState().groups} 
+          <GroupList groups={store.getState().groups}
             onGroupClick={id => store.dispatch({
               type:"REMOVE_GROUP",
               id

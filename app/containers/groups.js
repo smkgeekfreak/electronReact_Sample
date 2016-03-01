@@ -51,12 +51,12 @@ export function groups(state = [], action) {
   }
 }
 
-function findIndexById(state=[], value) {
-  // console.log("found =" + value)
-    for (var i = 0, len = state.length; i < len; i++) {
-      // console.log("val = " + JSON.stringify(state[i]))
-      if (state[i].id == value) {
-        return i;
-      }
-    }
-}
+// function findIndexById(state=[], value) {
+//   // console.log("found =" + value)
+//     for (var i = 0, len = state.length; i < len; i++) {
+//       // console.log("val = " + JSON.stringify(state[i]))
+//       if (state[i].id == value) {
+//         return i;
+//       }
+//     }
+// }
