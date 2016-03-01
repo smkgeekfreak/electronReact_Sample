@@ -10,6 +10,7 @@ import Counter from "./components/counter";
 import TodoList from "./components/todoList";
 import GroupList from "./components/groupList";
 import AddTodoPres from "./components/addtodo";
+import AddGroupPres from "./components/addgroup";
 import Griddle from 'griddle-react';
 import { Provider } from 'react-redux';
 // import DevTools from './components/DevTools';
@@ -144,10 +145,11 @@ var teams = [
 //   );
 // };
 
-class Application extends React.Component {
-  render() {
-    const visableTodos = getFilterTodos(store.getState().todos,store.getState().visibilityFilter);
-    return (
+// class Application extends React.Component {
+//   render() {
+//     // const visableTodos = getFilterTodos(store.getState().todos,store.getState().visibilityFilter);
+//     return (
+const Application = ({}) => (
       <div className="myDiv">
       <SplitPane split="vertical" minSize="75" defaultSize="75">
       <div className="urDiv">
@@ -165,16 +167,8 @@ class Application extends React.Component {
       <SplitPane split="horizontal"minSize="50" defaultSize="570">
           <Fonts>
           <div>
-          <input id="addText" ref={node=>{
-            this.input = node;
-          }}/>
-          <div>   </div>
-          <button onClick = {()=>{
-            store.dispatch(addTodo(this.input.value))
-            document.getElementById("addText").value= '';
-          }}>Add Todo</button>
 
-          <TodoList todos={visableTodos}
+          <TodoList todos={getFilterTodos(store.getState().todos,store.getState().visibilityFilter)}
               onTodoClick={id => store.dispatch({
                 type:"COMPLETE_TODO",
                 id
@@ -182,14 +176,11 @@ class Application extends React.Component {
           />
           </div>
           <div>
-          <input id="addGroup" ref={node=>{
-            this.groupName= node;
-          }}/>
-          <button onClick = {()=>{
-            store.dispatch(addGroup(document.getElementById("addGroup").value))
-            document.getElementById("addGroup").value= '';
-          }}>Add Group</button>
-
+          <AddGroupPres
+            onAddClick={ name=>
+              store.dispatch(addGroup(name))
+            }
+          />
           <GroupList groups={store.getState().groups}
             onGroupClick={id => store.dispatch({
               type:"REMOVE_GROUP",
@@ -223,8 +214,6 @@ class Application extends React.Component {
            store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED))
           }
           />
-          <Griddle  results={teams}/>
-          <Griddle  results={people}/>
           </Center>
           </Fonts>
           <div></div>
@@ -238,13 +227,13 @@ class Application extends React.Component {
     // console.log(store.getState())
     // store.dispatch(addTodo("combinded todo"))
     // console.log(store.getState())
-  }
-}
+//   }
+// }
 
 const render = () => {
   ReactDOM.render(
     <div>
-    <Application />
+    <Application {...store.getState()}/>
     </div>
     ,
     document.getElementById("root"));
