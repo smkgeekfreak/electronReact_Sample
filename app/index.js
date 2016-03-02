@@ -19,7 +19,7 @@ import VisFilter from "./components/visFilter"
 
 import {createStore, applyMiddleware, compose} from "redux";
 
-import todoApp from './containers/todos';
+import todoApp from './reducers/todos';
 
 const store = createStore(todoApp);
 
