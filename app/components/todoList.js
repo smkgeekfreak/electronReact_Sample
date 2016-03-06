@@ -1,22 +1,14 @@
 import React from 'react';
-export default ( props ) => (
+import Todo from './todo'
+export default ( props, onTodoClick ) => (
   <div className='theirDiv'>
   <ul>
     {props.todos.map( todo =>
-      <li key={todo.id}
-        onClick={()=> {
-          props.store.dispatch({
-            type:"COMPLETE_TODO",
-            id:todo.id
-          })
-        }}
-        style={{
-          textDecoration:
-            todo.completed ?
-                'line-through' : 'none'
-        }} >
-        {todo.text}
-      </li>
+      <Todo
+        key={todo.id}
+        {...todo}
+        onClick={() => props.onTodoClick(todo.id)}
+      />
     )}
   </ul>
   </div>

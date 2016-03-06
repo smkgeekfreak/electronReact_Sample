@@ -9,6 +9,8 @@ import Text from "./components/text";
 import Counter from "./components/counter";
 import TodoList from "./components/todoList";
 import GroupList from "./components/groupList";
+import AddTodoPres from "./components/addtodo";
+import AddGroupPres from "./components/addgroup";
 import Griddle from 'griddle-react';
 import { Provider } from 'react-redux';
 // import DevTools from './components/DevTools';
@@ -17,7 +19,7 @@ import VisFilter from "./components/visFilter"
 
 import {createStore, applyMiddleware, compose} from "redux";
 
-import todoApp from './containers/todos';
+import todoApp from './reducers/todos';
 
 const store = createStore(todoApp);
 
@@ -114,6 +116,7 @@ let people = [
         compentencyId: 2
       }
 ]
+
 var teams = [
   {
     id:0,
@@ -125,42 +128,44 @@ var teams = [
   }
 ]
 
-class Application extends React.Component {
-  render() {
-    const visableTodos = getFilterTodos(store.getState().todos,store.getState().visibilityFilter);
-    return (
+const Application = ({}) => (
       <div className="myDiv">
       <SplitPane split="vertical" minSize="75" defaultSize="75">
       <div className="urDiv">
-      <h1>This</h1>
-      <Text value="try"/>
-      <Text value="test"/>
+      <h1>This is longer</h1>
+      <Text value="try to improve"/>
+      <Text value="test and measure"/>
       <Text value={store.getState().count}/>
+      <AddTodoPres
+        onAddClick={ text=>
+          store.dispatch(addTodo(text))
+          }
+          />
       </div>
 
       <SplitPane split="horizontal"minSize="50" defaultSize="570">
           <Fonts>
           <div>
-          <input id="addText" ref={node=>{
-            this.input = node;
-          }}/>
-          <div>   </div>
-          <button onClick = {()=>{
-            store.dispatch(addTodo(this.input.value))
-            document.getElementById("addText").value= '';
-          }}>Add Todo</button>
 
-          <TodoList todos={visableTodos} store={store} divStyle='thierDiv' />
+          <TodoList todos={getFilterTodos(store.getState().todos,store.getState().visibilityFilter)}
+              onTodoClick={id => store.dispatch({
+                type:"COMPLETE_TODO",
+                id
+              })}
+          />
           </div>
           <div>
-          <input id="addGroup" ref={node=>{
-            this.groupName= node;
-          }}/>
-          <button onClick = {()=>{
-            store.dispatch(addGroup(document.getElementById("addGroup").value))
-            document.getElementById("addGroup").value= '';
-          }}>Add Group</button>
-          <GroupList groups={store.getState().groups} store={store} />
+          <AddGroupPres
+            onAddClick={ name=>
+              store.dispatch(addGroup(name))
+            }
+          />
+          <GroupList groups={store.getState().groups}
+            onGroupClick={id => store.dispatch({
+              type:"REMOVE_GROUP",
+              id
+            })}
+          />
           </div>
           <Center>
           <div>
@@ -188,8 +193,6 @@ class Application extends React.Component {
            store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED))
           }
           />
-          <Griddle  results={teams}/>
-          <Griddle  results={people}/>
           </Center>
           </Fonts>
           <div></div>
@@ -203,13 +206,13 @@ class Application extends React.Component {
     // console.log(store.getState())
     // store.dispatch(addTodo("combinded todo"))
     // console.log(store.getState())
-  }
-}
+//   }
+// }
 
 const render = () => {
   ReactDOM.render(
     <div>
-    <Application />
+    <Application {...store.getState()}/>
     </div>
     ,
     document.getElementById("root"));
