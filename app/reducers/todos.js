@@ -114,7 +114,7 @@ function visibilityFilter(state = SHOW_ALL, action) {
 }
 
 
-const todoApp = combineReducers({
+let todoApp = combineReducers({
   count,
   visibilityFilter,
   todos,

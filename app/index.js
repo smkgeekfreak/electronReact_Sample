@@ -19,12 +19,36 @@ import VisFilter from "./components/visFilter"
 
 import {createStore, applyMiddleware, compose} from "redux";
 
-import todoApp from './reducers/todos';
+import rootReducer from './reducers/todos';
 
-const store = createStore(todoApp);
+function createLogger({ getState }) {
+  return (next) =>
+    (action) => {
+      const console = window.console;
+      const prevState = getState();
+      const returnValue = next(action);
+      const nextState = getState();
+      const actionType = String(action.type);
+      const message = `action ${actionType}`;
+      console.log(`%c prev state`, `color: #9E9E9E`, prevState);
+      console.log(`%c action`, `color: #03A9F4`, action);
+      console.log(`%c next state`, `color: #5CAF50`, nextState);
+      return returnValue;
+    };
+}
+const createStoreWithMiddleware =
+  applyMiddleware(createLogger)(createStore);
 
-console.log("Initial State");
-console.log(store.getState())
+function configureStore(initialState) {
+  return createStoreWithMiddleware(rootReducer, initialState);
+}
+const store = configureStore();
+// const store = createStore(todoApp);
+// const store = createStore(
+//   todoApp,
+//   // applyMiddleware(logger)
+// )
+// console.log('before middleware logger')
 
 const FilterLink = ({
   filter,
@@ -128,78 +152,76 @@ var teams = [
   }
 ]
 
+
 const Application = ({}) => (
       <div className="myDiv">
-      <SplitPane split="vertical" minSize="75" defaultSize="75">
-      <div className="urDiv">
-      <h1>This is longer</h1>
-      <Text value="try to improve"/>
-      <Text value="test and measure"/>
-      <Text value={store.getState().count}/>
-      <AddTodoPres
-        onAddClick={ text=>
-          store.dispatch(addTodo(text))
-          }
-          />
-      </div>
-
-      <SplitPane split="horizontal"minSize="50" defaultSize="570">
-          <Fonts>
-          <div>
-
-          <TodoList todos={getFilterTodos(store.getState().todos,store.getState().visibilityFilter)}
-              onTodoClick={id => store.dispatch({
-                type:"COMPLETE_TODO",
-                id
-              })}
+        <SplitPane split="vertical" minSize="75" defaultSize="75">
+          <div className="urDiv">
+          <h1>This is longer</h1>
+          <Text value="try to improve"/>
+          <Text value="test and measure"/>
+          <Text value={store.getState().count}/>
+          <AddTodoPres
+            onAddClick={ text=> store.dispatch(addTodo(text)) }
           />
           </div>
-          <div>
-          <AddGroupPres
-            onAddClick={ name=>
-              store.dispatch(addGroup(name))
-            }
-          />
-          <GroupList groups={store.getState().groups}
-            onGroupClick={id => store.dispatch({
-              type:"REMOVE_GROUP",
-              id
-            })}
-          />
-          </div>
-          <Center>
-          <div>
-          <Counter value={store.getState()}
-            onInc={() =>
-             store.dispatch({
-             type: "INCREMENT_COUNT",
-           })
-          }
-          onDe={() =>
-           store.dispatch({
-             type: "DECREMENT_COUNT"
-           })
-          }
-          />
-          </div>
-          <VisFilter
-            onShowAll={() =>
-              store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_ALL))
-          }
-          onShowActive={() =>
-           store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_ACTIVE))
-          }
-          onShowCompleted={() =>
-           store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED))
-          }
-          />
-          </Center>
-          </Fonts>
-          <div></div>
-      <div></div>
-      </SplitPane>
-      </SplitPane>
 
+          <SplitPane split="horizontal" minSize="100" defaultSize="500">
+              <Fonts>
+              <div>
+
+              <TodoList todos={getFilterTodos(store.getState().todos,store.getState().visibilityFilter)}
+                  onTodoClick={id => store.dispatch({
+                    type:"COMPLETE_TODO",
+                    id
+                  })}
+              />
+              </div>
+              <div>
+              <AddGroupPres
+                onAddClick={ name=>
+                  store.dispatch(addGroup(name))
+                }
+              />
+              <GroupList groups={store.getState().groups}
+                onGroupClick={id => store.dispatch({
+                  type:"REMOVE_GROUP",
+                  id
+                })}
+              />
+              </div>
+              <div>
+              <Counter value={store.getState()}
+                onInc={() =>
+                 store.dispatch({
+                 type: "INCREMENT_COUNT",
+               })
+              }
+              onDe={() =>
+               store.dispatch({
+                 type: "DECREMENT_COUNT"
+               })
+              }
+              />
+              </div>
+              <VisFilter
+                onShowAll={() =>
+                  store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_ALL))
+              }
+              onShowActive={() =>
+               store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_ACTIVE))
+              }
+              onShowCompleted={() =>
+               store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED))
+              }
+              />
+              <Griddle  results={store.getState().todos}/>
+              </Fonts>
+              <Griddle  results={store.getState().groups}/>
+          </SplitPane>
+          <div>
+          </div>
+        </SplitPane>
       </div>
 
     );
@@ -209,14 +231,20 @@ const Application = ({}) => (
 //   }
 // }
 
+// const store = createStore(todoApp);
+
+
+// console.log("Initial State");
+// console.log(store.getState())
+
 const render = () => {
   ReactDOM.render(
     <div>
-    <Application {...store.getState()}/>
+    <Application {...store}/>
     </div>
     ,
     document.getElementById("root"));
-    console.log(store.getState())
+    // console.log(store.getState())
   };
 
 store.subscribe(render);

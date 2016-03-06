@@ -22,7 +22,7 @@ export function group(state, action ) {
 }
 
 export function groups(state = [], action) {
-  console.log('action =' + action.id);
+  // console.log('action =' + action.id);
   switch (action.type) {
     case ADD_GROUP:
       return [
