@@ -1,67 +1,11 @@
 import { combineReducers } from 'redux'
 import {
   ADD_TODO, COMPLETE_TODO,
-  SET_VISIBILITY_FILTER, VisibilityFilters,
-  ADD_GROUP, RENAME_GROUP, REMOVE_GROUP
+  SET_VISIBILITY_FILTER, VisibilityFilters
 } from '../actions/actions'
 import { group, groups} from './groups'
+import  Counter from './counter'
 const { SHOW_ALL } = VisibilityFilters
-
-function count(state = 0, action) {
-
-  // if(typeof state === 'undefined'){
-  //     console.log('count underfined');
-  //     return {
-  //       ...state,
-  //       count: 0
-  //     }
-  // }
-  switch (action.type) {
-    case 'INCREMENT_COUNT':
-      return state + 1;
-    case 'DECREMENT_COUNT' :
-      return state - 1;
-    default:
-      return state
-  }
-}
-
-// function group(state, action ) {
-//   switch (action.type) {
-//     case ADD_GROUP:
-//       return {
-//         ...state,
-//         name: action.name,
-//         status: 'ACTIVE'
-//       }
-//     case RENAME_GROUP:
-//       if(state.id !== action.id) {
-//         return state;
-//       }
-//       return {
-//         ...state,
-//         name: action.name
-//       }
-//   }
-// }
-//
-// function groups(state = [], action) {
-//   switch (action.type) {
-//     case ADD_GROUP:
-//       return [
-//         ...state,
-//         group({
-//           id:state.reduce((maxId, group) => Math.max(group.id, maxId), -1) + 1
-//         }, action)
-//       ]
-//     case RENAME_GROUP:
-//       return state.map(g =>
-//         group(g, action)
-//       )
-//     default:
-//       return state
-//   }
-// }
 
 function todo(state, action) {
   switch (action.type) {
@@ -113,9 +57,8 @@ function visibilityFilter(state = SHOW_ALL, action) {
   }
 }
 
-
 let todoApp = combineReducers({
-  count,
+  Counter,
   visibilityFilter,
   todos,
   groups
