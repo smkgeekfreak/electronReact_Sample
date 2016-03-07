@@ -28,12 +28,16 @@ export function addGroup(name) {
   return { type: ADD_GROUP, name}
 }
 
+export function removeGroup(id) {
+  return { type: REMOVE_GROUP, id}
+}
+
 export function addTodo(text) {
   return { type: ADD_TODO, text }
 }
 
-export function completeTodo(index) {
-  return { type: COMPLETE_TODO, index }
+export function completeTodo(id) {
+  return { type: COMPLETE_TODO, id}
 }
 
 export function setVisibilityFilter(filter) {

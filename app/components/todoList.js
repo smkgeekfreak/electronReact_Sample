@@ -1,23 +1,26 @@
-import React from 'react';
-export default ( props ) => (
+import React, { PropTypes } from 'react';
+import Todo from './todo'
+const TodoList = ( props, onTodoClick ) => (
   <div className='theirDiv'>
   <ul>
     {props.todos.map( todo =>
-      <li key={todo.id}
-        onClick={()=> {
-          props.store.dispatch({
-            type:"COMPLETE_TODO",
-            id:todo.id
-          })
-        }}
-        style={{
-          textDecoration:
-            todo.completed ?
-                'line-through' : 'none'
-        }} >
-        {todo.text}
-      </li>
+      <Todo
+        key={todo.id}
+        {...todo}
+        onClick={() => props.onTodoClick(todo.id)}
+      />
     )}
   </ul>
   </div>
 );
+
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    completed: PropTypes.bool.isRequired,
+    text: PropTypes.string.isRequired
+  }).isRequired).isRequired,
+  onTodoClick: PropTypes.func.isRequired
+}
+
+export default TodoList

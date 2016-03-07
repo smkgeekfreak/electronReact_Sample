@@ -1,11 +1,13 @@
 import React from 'react';
-export default ( props ) => (
+import Group from "./group";
+export default ( props, onGroupClick ) => (
   <div className='urDiv'>
   <ul>
     {props.groups.map( group =>
-      <li key={group.id}>
-        {group.name}
-      </li>
+      <Group key={group.id}
+        {...group}
+        onClick={() => props.onGroupClick(group.id)}
+      />
     )}
   </ul>
   </div>
