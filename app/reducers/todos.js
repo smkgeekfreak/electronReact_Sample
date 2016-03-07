@@ -1,11 +1,4 @@
-import { combineReducers } from 'redux'
-import {
-  ADD_TODO, COMPLETE_TODO,
-  SET_VISIBILITY_FILTER, VisibilityFilters
-} from '../actions/actions'
-import { group, groups} from './groups'
-import  Counter from './counter'
-const { SHOW_ALL } = VisibilityFilters
+import { ADD_TODO, COMPLETE_TODO } from '../actions/actions'
 
 function todo(state, action) {
   switch (action.type) {
@@ -48,20 +41,4 @@ function todos(state = [], action) {
   }
 }
 
-function visibilityFilter(state = SHOW_ALL, action) {
-  switch (action.type) {
-    case SET_VISIBILITY_FILTER:
-      return action.filter
-    default:
-      return state
-  }
-}
-
-let todoApp = combineReducers({
-  Counter,
-  visibilityFilter,
-  todos,
-  groups
-})
-
-export default todoApp
+export default todos

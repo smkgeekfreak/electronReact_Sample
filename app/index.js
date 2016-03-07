@@ -20,7 +20,7 @@ import VisFilter from "./components/visFilter"
 
 import {createStore, applyMiddleware, compose} from "redux";
 
-import rootReducer from './reducers/todos';
+import rootReducer from './reducers/rootReducer';
 
 function createLogger({ getState }) {
   return (next) =>
@@ -77,7 +77,7 @@ const Application = () => (
             <h1>This is longer</h1>
             <Text value="try to improve"/>
             <Text value="test and measure"/>
-            <Text value={store.getState().Counter}/>
+            <Text value={store.getState().counter}/>
             <AddTodoPres
               onAddClick={ text=> store.dispatch(addTodo(text)) }
             />
@@ -116,7 +116,7 @@ const Application = () => (
               </Fonts>
               <Griddle  results={store.getState().groups}/>
           </SplitPane>
-          
+
         </SplitPane>
       </div>
     );

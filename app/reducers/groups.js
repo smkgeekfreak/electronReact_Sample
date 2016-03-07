@@ -1,8 +1,6 @@
-import {
-  ADD_GROUP, RENAME_GROUP, REMOVE_GROUP
-} from '../actions/actions'
+import { ADD_GROUP, RENAME_GROUP, REMOVE_GROUP } from '../actions/actions'
 
-export function group(state, action ) {
+function group(state, action ) {
   switch (action.type) {
     case ADD_GROUP:
       return {
@@ -51,6 +49,7 @@ export function groups(state = [], action) {
   }
 }
 
+export default groups
 // function findIndexById(state=[], value) {
 //   // console.log("found =" + value)
 //     for (var i = 0, len = state.length; i < len; i++) {
