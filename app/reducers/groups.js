@@ -3,7 +3,9 @@ import { ADD_GROUP, RENAME_GROUP, REMOVE_GROUP } from '../actions/actions'
 function group(state, action ) {
   switch (action.type) {
     case ADD_GROUP:
+
       return {
+
         ...state,
         name: action.name,
         status: 'ACTIVE'
@@ -23,6 +25,9 @@ export function groups(state = [], action) {
   // console.log('action =' + action.id);
   switch (action.type) {
     case ADD_GROUP:
+      if(!action.name) {
+        return state;
+      }
       return [
         ...state,
         group({

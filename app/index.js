@@ -112,11 +112,10 @@ const Application = () => (
                   onShowCompleted={() =>
                    store.dispatch(setVisibilityFilter(VisibilityFilters.SHOW_COMPLETED)) }
                 />
-                <Griddle  results={getFilterTodos(store.getState().todos,store.getState().visibilityFilter)}/>
+                <Griddle results={getFilterTodos(store.getState().todos,store.getState().visibilityFilter)}/>
               </Fonts>
-              <Griddle  results={store.getState().groups}/>
+              <Griddle results={store.getState().groups}/>
           </SplitPane>
-
         </SplitPane>
       </div>
     );
@@ -134,10 +133,10 @@ const render = () => {
 
 store.subscribe(render);
 render();
-store.dispatch(addTodo("combinded todo"))
-store.dispatch(addTodo("second todo"))
-store.dispatch(addGroup("My Group"))
-store.dispatch(addGroup("2nd Group"))
+// store.dispatch(addTodo("combinded todo"))
+// store.dispatch(addTodo("second todo"))
+// store.dispatch(addGroup("My Group"))
+// store.dispatch(addGroup("2nd Group"))
 
 // import showMyDevTools from './showDevTools';
 // if (process.env.NODE_ENV !== 'production') {
