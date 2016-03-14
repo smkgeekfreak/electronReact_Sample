@@ -3,7 +3,7 @@ export default ({
   onClick,
   name
 }) => (
-  <div className='theirDiv'>
+  <div className='urDiv'>
       <li onClick={ onClick } >
         {name}
       </li>

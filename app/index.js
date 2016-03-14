@@ -19,7 +19,7 @@ import {countUp, countDown} from './actions/counterActions'
 import VisFilter from "./components/visFilter"
 
 import {createStore, applyMiddleware, compose} from "redux";
-
+import thunk from 'redux-thunk';
 import rootReducer from './reducers/rootReducer';
 
 function createLogger({ getState }) {
@@ -38,7 +38,7 @@ function createLogger({ getState }) {
     };
 }
 const createStoreWithMiddleware =
-  applyMiddleware(createLogger)(createStore);
+  applyMiddleware(createLogger,thunk)(createStore);
 
 function configureStore(initialState) {
   return createStoreWithMiddleware(rootReducer, initialState);
@@ -72,7 +72,7 @@ const Center = ({ children }) =>
 
 const Application = () => (
       <div className="myDiv">
-        <SplitPane split="vertical" minSize="75" defaultSize="75">
+        <SplitPane split="vertical" minSize="175" defaultSize="200">
           <div className="urDiv">
             <h1>This is longer</h1>
             <Text value="try to improve"/>

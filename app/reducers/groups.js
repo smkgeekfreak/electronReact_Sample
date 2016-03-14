@@ -1,14 +1,12 @@
-import { ADD_GROUP, RENAME_GROUP, REMOVE_GROUP } from '../actions/actions'
+import { ADD_GROUP, RENAME_GROUP, REMOVE_GROUP, ACTIVATE_GROUP } from '../actions/actions'
 
 function group(state, action ) {
   switch (action.type) {
     case ADD_GROUP:
-
       return {
-
         ...state,
         name: action.name,
-        status: 'ACTIVE'
+        status: 'PENDING'
       }
     case RENAME_GROUP:
       if(state.id !== action.id) {
@@ -17,6 +15,16 @@ function group(state, action ) {
       return {
         ...state,
         name: action.name
+      }
+    case ACTIVATE_GROUP:
+      console.log('state name %s, action name %s', state.name, action.name)
+      if(state.name !== action.name) {
+        return state;
+      }
+      return {
+        ...state,
+        id: action.id,
+        status: 'ACTIVE'
       }
   }
 }
@@ -49,6 +57,11 @@ export function groups(state = [], action) {
           ...state.slice(index + 1)
         ]
       return state;
+    case ACTIVATE_GROUP:
+        console.log('activating state =' + JSON.stringify(state));
+        return state.map(g =>
+          group(g, action)
+        )
     default:
       return state
   }
