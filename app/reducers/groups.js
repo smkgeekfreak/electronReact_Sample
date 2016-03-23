@@ -1,7 +1,16 @@
-import { ADD_GROUP, RENAME_GROUP, REMOVE_GROUP, ACTIVATE_GROUP } from '../actions/actions'
+import { ADD_GROUP, RENAME_GROUP, REMOVE_GROUP, ACTIVATE_GROUP,LOAD_GROUPS } from '../actions/actions'
+
 
 function group(state, action ) {
   switch (action.type) {
+      // )
+    case 'SYNC':
+      console.log('SYNC')
+      return {
+        ...state,
+        name: action.name,
+        status: 'SYNCED'
+      }
     case ADD_GROUP:
       return {
         ...state,
@@ -32,16 +41,32 @@ function group(state, action ) {
 export function groups(state = [], action) {
   // console.log('action =' + action.id);
   switch (action.type) {
+    case LOAD_GROUPS:
+      console.log("load me ", action.json)
+      // return state
+      // return action.json.map(g =>
+      let newState = action.json.map(function(j){
+          // let jet = JSON.parse(j);
+          console.log(j);
+          return {id:j.id,name:j.name,status:'SYNCD'}
+        })
+      return newState;
+
     case ADD_GROUP:
       if(!action.name) {
         return state;
       }
+      let match = state.find(function(f){return f.name===action.name});
+      console.log("match = ", match)
+      if(!match){
       return [
         ...state,
         group({
           id:state.reduce((maxId, group) => Math.max(group.id, maxId), -1) + 1
         }, action)
       ]
+    }
+    return state;
     case RENAME_GROUP:
       return state.map(g =>
         group(g, action)

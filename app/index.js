@@ -14,7 +14,8 @@ import AddGroupPres from "./components/addgroup";
 import Griddle from 'griddle-react';
 import { Provider } from 'react-redux';
 // import DevTools from './components/DevTools';
-import {addGroup, removeGroup, addTodo, completeTodo, setVisibilityFilter,VisibilityFilters} from './actions/actions'
+import {addGroup, removeGroup, loadGroups, addTodo, completeTodo, setVisibilityFilter,VisibilityFilters} from './actions/actions'
+
 import {countUp, countDown} from './actions/counterActions'
 import VisFilter from "./components/visFilter"
 
@@ -70,7 +71,15 @@ const Center = ({ children }) =>
     {children}
   </Flex>;
 
-const Application = () => (
+  // const Application = () => (
+class Application extends React.Component {
+  componentDidMount() {
+    store.dispatch(loadGroups())
+  }
+
+  render() {
+    return (
+
       <div className="myDiv">
         <SplitPane split="vertical" minSize="175" defaultSize="200">
           <div className="urDiv">
@@ -118,7 +127,9 @@ const Application = () => (
           </SplitPane>
         </SplitPane>
       </div>
-    );
+    )};
+  }
+
 // const store = createStore(todoApp);
 
 const render = () => {

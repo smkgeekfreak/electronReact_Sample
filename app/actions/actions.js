@@ -10,6 +10,7 @@ export const ADD_GROUP = 'ADD_GROUP'
 export const RENAME_GROUP = 'RENAME_GROUP'
 export const REMOVE_GROUP = 'REMOVE_GROUP'
 export const ACTIVATE_GROUP= 'ACTIVATE_GROUP'
+export const LOAD_GROUPS= 'LOAD_GROUPS'
 
 /*
  * other constants
@@ -35,8 +36,12 @@ export function removeGroup(id) {
 }
 
 export function activateGroup(id,name) {
-  return { type: ACTIVATE_GROUP, id, name}
+  return { type: ACTIVATE_GROUP,id, name}
 }
+export function receivedGroups(json) {
+  return { type: LOAD_GROUPS, json }
+}
+
 
 // export function addTodo(text) {
 //   return { type: ADD_TODO, text }
@@ -107,14 +112,14 @@ export function addGroup(name) {
     let g = dispatch(addGroupOptimistic(name));
     console.log("new group:" + JSON.stringify(g))
     //
-    fetch('http://192.168.99.100:9080/crud', {
+    fetch('http://192.168.99.100:10001/crud', {
       method: 'post',
       headers: {
         // 'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        sample: name
+        name: name
       })
     }).then(response => {
       console.log(response);
@@ -123,11 +128,40 @@ export function addGroup(name) {
       // you should probably get a real id for your new todo item here,
       // and update your store, but we'll leave that to you
       console.log("return body ",json);
-      dispatch(activateGroup(json.uid,name));
+      dispatch(activateGroup(json.id,json.name));
     }).catch(err => {
     // Error: handle it the way you like, undoing the optimistic update,
     //  showing a "out of sync" message, etc.
     console.log(err);
+    });
+  // what you return here gets returned by the dispatch function that
+  // used this action creator
+  return null;
+  }
+}
+
+export function loadGroups() {
+  return function(dispatch) {
+    //
+    fetch('http://192.168.99.100:10001/crud/all', {
+      method: 'get',
+      headers: {
+        // 'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(response => {
+      console.log(response);
+      return response.json()
+    }).then(json => {
+      // you should probably get a real id for your new todo item here,
+      // and update your store, but we'll leave that to you
+      console.log("return body= ",json);
+      dispatch(receivedGroups(json));
+      //dispatch(activateGroup(json.uid,name));
+    }).catch(err => {
+    // Error: handle it the way you like, undoing the optimistic update,
+    //  showing a "out of sync" message, etc.
+      console.log(err);
     });
   // what you return here gets returned by the dispatch function that
   // used this action creator
